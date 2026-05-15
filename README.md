@@ -73,3 +73,11 @@ GitHub Pages should be configured from:
 
 - Branch: `main`
 - Folder: `/docs`
+
+## License
+
+This project is not open source. See [LICENSE](LICENSE).
+
+## Version Tags
+
+- `v0.1.0`: first GitHub-managed pre-release snapshot
