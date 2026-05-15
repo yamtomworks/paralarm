@@ -1,4 +1,4 @@
-# codex_paralarm
+# Paralarm
 
 A new Flutter project.
 
