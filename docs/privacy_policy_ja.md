@@ -96,7 +96,6 @@ Google による情報の取り扱いについては、以下をご確認くだ�
 
 本プライバシーポリシーに関するお問い合わせは、以下までご連絡ください。
 
-開発者名: [開発者名を入力]
+開発者名: yamtomworks
 
-連絡先: [メールアドレスを入力]
-
+連絡先: https://github.com/yamtomworks/paralarm/issues
