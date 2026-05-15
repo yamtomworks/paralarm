@@ -31,6 +31,7 @@ Privacy policy files are in `docs/`.
 
 - GitHub Pages target: `docs/privacy_policy.html`
 - Expected published URL: `https://yamtomworks.github.io/paralarm/privacy_policy.html`
+- Disclaimer URL: `https://yamtomworks.github.io/paralarm/disclaimer.html`
 
 ## Development
 
@@ -62,6 +63,7 @@ Before public release, replace test or demo-only settings:
 - Confirm App Store Connect privacy details.
 - Confirm Google Play Data safety form.
 - Publish the privacy policy using GitHub Pages.
+- Publish the disclaimer using GitHub Pages.
 - Prepare App Store / Google Play screenshots.
 - Configure real iOS signing and Android release signing.
 

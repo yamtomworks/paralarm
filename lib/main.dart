@@ -110,6 +110,14 @@ class AppStrings {
     '达到阈值时，应用会通过声音或振动提醒。常用设置可保存为预设，下次快速加载。',
     'Al alcanzar el umbral, la app avisa con sonido o vibración. Guarda ajustes frecuentes como preajustes y cárgalos rápido la próxima vez.',
   );
+  String get tutorialSafetyTitle =>
+      _text('安全に使う', 'Use Safely', '安全使用', 'Uso seguro');
+  String get tutorialSafetyBody => _text(
+    '端末を投げたり、強く振り回したり、走行中や危険な場所で使用しないでください。事故や怪我、端末破損につながる可能性があります。',
+    'Do not throw, swing, or use the device while running or in unsafe places. Misuse may cause accidents, injury, or device damage.',
+    '请勿投掷、用力挥动设备，或在奔跑中、危险场所使用。本应用使用不当可能导致事故、受伤或设备损坏。',
+    'No lances ni agites el dispositivo, ni lo uses mientras corres o en lugares peligrosos. Un uso indebido puede causar accidentes, lesiones o daños al dispositivo.',
+  );
   String get tutorialPrivacyTitle => _text(
     'データは端末内で処理',
     'Processed on Device',
@@ -2286,6 +2294,11 @@ class _TutorialDialogState extends State<_TutorialDialog> {
       icon: Icons.notification_important_outlined,
       title: widget.strings.tutorialAlertTitle,
       body: widget.strings.tutorialAlertBody,
+    ),
+    _TutorialPageData(
+      icon: Icons.health_and_safety_outlined,
+      title: widget.strings.tutorialSafetyTitle,
+      body: widget.strings.tutorialSafetyBody,
     ),
     _TutorialPageData(
       icon: Icons.privacy_tip_outlined,

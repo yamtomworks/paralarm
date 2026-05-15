@@ -17,6 +17,7 @@
 
 ```text
 https://yamtomworks.github.io/paralarm/privacy_policy.html
+https://yamtomworks.github.io/paralarm/disclaimer.html
 ```
 
 ## Repository Visibility
@@ -40,4 +41,3 @@ GitHubの `Issues` タブで、`Release checklist` テンプレートからリ�
 - アプリ内課金本実装
 - ストア画像
 - iOS/Androidリリース署名
-
