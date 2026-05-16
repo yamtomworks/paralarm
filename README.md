@@ -35,6 +35,11 @@ Privacy policy files are in `docs/`.
 
 ## Development
 
+Production identifiers:
+
+- Android application ID: `com.yamtomworks.paralarm`
+- iOS bundle identifier: `com.yamtomworks.paralarm`
+
 ```bash
 flutter pub get
 flutter run

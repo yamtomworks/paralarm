@@ -1,4 +1,4 @@
-package com.example.codex_paralarm
+package com.yamtomworks.paralarm
 
 import android.media.AudioManager
 import android.media.ToneGenerator
