@@ -52,6 +52,7 @@ const _hasSeenTutorialStorageKey = 'has_seen_tutorial_v1';
 const _settingsPresetSlots = 3;
 const _freeSettingsPresetSlots = 1;
 const _maxDangerAlertTicks = 20;
+const _premiumFeaturesEnabled = false;
 
 class AppStrings {
   const AppStrings(this.appLanguage);
@@ -662,8 +663,9 @@ class _ParalarmHomeState extends State<ParalarmHome>
 
   AppStrings get _strings => AppStrings(_language);
 
-  int get _availablePresetSlots =>
-      _isPremium ? _settingsPresetSlots : _freeSettingsPresetSlots;
+  int get _availablePresetSlots => _premiumFeaturesEnabled && _isPremium
+      ? _settingsPresetSlots
+      : _freeSettingsPresetSlots;
 
   bool _isFreeAlarmSound(AlarmSoundOption option) {
     return option == AlarmSoundOption.loudBeep ||
@@ -777,7 +779,7 @@ class _ParalarmHomeState extends State<ParalarmHome>
     }
 
     setState(() {
-      _isPremium = isPremium;
+      _isPremium = _premiumFeaturesEnabled && isPremium;
       _hasSeenTutorial = hasSeenTutorial;
 
       for (var index = 0; index < _settingsPresetSlots; index++) {
@@ -1700,13 +1702,15 @@ class _ParalarmHomeState extends State<ParalarmHome>
     _target = preset.target;
     _rule = preset.rule;
     _threshold = preset.threshold.clamp(_minThreshold, _maxThreshold);
-    _alarmSound = _isPremium || _isFreeAlarmSound(preset.alarmSound)
+    _alarmSound =
+        (_premiumFeaturesEnabled && _isPremium) ||
+            _isFreeAlarmSound(preset.alarmSound)
         ? preset.alarmSound
         : AlarmSoundOption.loudBeep;
     _alarmVibration = preset.alarmVibration;
     _countdownSeconds = preset.countdownSeconds;
     _movingAverageStrength = preset.movingAverageStrength.clamp(0, 10);
-    _dangerAlertStrength = _isPremium
+    _dangerAlertStrength = _premiumFeaturesEnabled && _isPremium
         ? preset.dangerAlertStrength.clamp(0, _maxDangerAlertTicks)
         : 0;
     _dangerAlertMode = preset.dangerAlertMode;
@@ -1777,13 +1781,14 @@ class _ParalarmHomeState extends State<ParalarmHome>
                             ),
                       ),
                       const SizedBox(height: 10),
-                      if (_isPremium)
+                      if (_premiumFeaturesEnabled && _isPremium)
                         OutlinedButton.icon(
                           onPressed: _scanPresetQr,
                           icon: const Icon(Icons.qr_code_scanner, size: 18),
                           label: Text(strings.qrScan),
                         ),
-                      if (_isPremium) const SizedBox(height: 10),
+                      if (_premiumFeaturesEnabled && _isPremium)
+                        const SizedBox(height: 10),
                       for (
                         var index = 0;
                         index < _availablePresetSlots;
@@ -1799,7 +1804,7 @@ class _ParalarmHomeState extends State<ParalarmHome>
                           loadLabel: strings.load,
                           renameLabel: strings.rename,
                           qrLabel: strings.qrShow,
-                          isPremium: _isPremium,
+                          isPremium: _premiumFeaturesEnabled && _isPremium,
                           onSave: () async {
                             await _saveSettingsPreset(index);
                             setDialogState(() {});
@@ -1829,23 +1834,27 @@ class _ParalarmHomeState extends State<ParalarmHome>
                         if (index != _availablePresetSlots - 1)
                           const SizedBox(height: 10),
                       ],
-                      const SizedBox(height: 18),
-                      FilledButton.icon(
-                        onPressed: _isPremium
-                            ? null
-                            : () async {
-                                await _upgradeToPremium();
-                                setDialogState(() {});
-                              },
-                        icon: Icon(
-                          _isPremium ? Icons.verified : Icons.workspace_premium,
+                      if (_premiumFeaturesEnabled) ...[
+                        const SizedBox(height: 18),
+                        FilledButton.icon(
+                          onPressed: _isPremium
+                              ? null
+                              : () async {
+                                  await _upgradeToPremium();
+                                  setDialogState(() {});
+                                },
+                          icon: Icon(
+                            _isPremium
+                                ? Icons.verified
+                                : Icons.workspace_premium,
+                          ),
+                          label: Text(
+                            _isPremium
+                                ? strings.premiumUnlocked
+                                : strings.upgradeToPremium,
+                          ),
                         ),
-                        label: Text(
-                          _isPremium
-                              ? strings.premiumUnlocked
-                              : strings.upgradeToPremium,
-                        ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
@@ -1865,7 +1874,7 @@ class _ParalarmHomeState extends State<ParalarmHome>
         rule: _rule,
         alarmSound: _alarmSound,
         alarmVibration: _alarmVibration,
-        isPremium: _isPremium,
+        isPremium: _premiumFeaturesEnabled && _isPremium,
         countdownSeconds: _countdownSeconds,
         movingAverageStrength: _movingAverageStrength,
         dangerAlertStrength: _dangerAlertStrength,
@@ -1916,6 +1925,9 @@ class _ParalarmHomeState extends State<ParalarmHome>
           });
         },
         onDangerAlertStrengthChanged: (value) {
+          if (!_premiumFeaturesEnabled) {
+            return;
+          }
           if (!_isPremium && value > 0) {
             _showPremiumDialog();
             setState(() {});
@@ -2023,7 +2035,7 @@ class _ParalarmHomeState extends State<ParalarmHome>
         ),
         child: SafeArea(child: body),
       ),
-      bottomNavigationBar: _isPremium
+      bottomNavigationBar: _premiumFeaturesEnabled && _isPremium
           ? null
           : _AdMobBanner(placeholderLabel: _strings.adPlaceholder),
     );
@@ -2186,11 +2198,12 @@ class _PresetSlotTile extends StatelessWidget {
                   icon: const Icon(Icons.upload, size: 18),
                   label: Text(loadLabel),
                 ),
-                OutlinedButton.icon(
-                  onPressed: isPremium ? onShowQr : null,
-                  icon: const Icon(Icons.qr_code, size: 18),
-                  label: Text(qrLabel),
-                ),
+                if (_premiumFeaturesEnabled)
+                  OutlinedButton.icon(
+                    onPressed: isPremium ? onShowQr : null,
+                    icon: const Icon(Icons.qr_code, size: 18),
+                    label: Text(qrLabel),
+                  ),
               ],
             ),
           ],
@@ -2305,11 +2318,12 @@ class _TutorialDialogState extends State<_TutorialDialog> {
       title: widget.strings.tutorialPrivacyTitle,
       body: widget.strings.tutorialPrivacyBody,
     ),
-    _TutorialPageData(
-      icon: Icons.workspace_premium_outlined,
-      title: widget.strings.tutorialPremiumTitle,
-      body: widget.strings.tutorialPremiumBody,
-    ),
+    if (_premiumFeaturesEnabled)
+      _TutorialPageData(
+        icon: Icons.workspace_premium_outlined,
+        title: widget.strings.tutorialPremiumTitle,
+        body: widget.strings.tutorialPremiumBody,
+      ),
   ];
 
   @override
@@ -3097,7 +3111,9 @@ class _AdvancedSettingsPanel extends StatelessWidget {
             _DropdownSetting<AlarmSoundOption>(
               label: strings.alarmSound,
               value: alarmSound,
-              values: AlarmSoundOption.values,
+              values: _premiumFeaturesEnabled && isPremium
+                  ? AlarmSoundOption.values
+                  : const [AlarmSoundOption.loudBeep, AlarmSoundOption.off],
               labelFor: strings.alarmSoundLabel,
               onChanged: onAlarmSoundChanged,
               trailing: _PreviewIconButton(
@@ -3130,34 +3146,36 @@ class _AdvancedSettingsPanel extends StatelessWidget {
               valueLabel: strings.movingAverageLabel(movingAverageStrength),
               onChanged: onMovingAverageStrengthChanged,
             ),
-            const SizedBox(height: 16),
-            if (!isPremium) ...[
-              _PremiumHint(label: strings.premiumRequired),
-              const SizedBox(height: 10),
+            if (_premiumFeaturesEnabled) ...[
+              const SizedBox(height: 16),
+              if (!isPremium) ...[
+                _PremiumHint(label: strings.premiumRequired),
+                const SizedBox(height: 10),
+              ],
+              _MovingAverageSetting(
+                label: strings.dangerAlert,
+                value: dangerAlertStrength,
+                valueLabel: dangerAlertValueLabel,
+                max: _maxDangerAlertTicks,
+                onChanged: onDangerAlertStrengthChanged,
+              ),
+              const SizedBox(height: 14),
+              _DropdownSetting<DangerAlertMode>(
+                label: strings.dangerAlertMethod,
+                value: dangerAlertMode,
+                values: DangerAlertMode.values,
+                labelFor: strings.dangerAlertModeLabel,
+                enabled: dangerAlertStrength > 0,
+                onChanged: onDangerAlertModeChanged,
+              ),
+              const SizedBox(height: 14),
+              _CheckboxSetting(
+                label: strings.dangerAlertAcceleration,
+                value: dangerAlertAcceleration,
+                enabled: dangerAlertStrength > 0,
+                onChanged: onDangerAlertAccelerationChanged,
+              ),
             ],
-            _MovingAverageSetting(
-              label: strings.dangerAlert,
-              value: dangerAlertStrength,
-              valueLabel: dangerAlertValueLabel,
-              max: _maxDangerAlertTicks,
-              onChanged: onDangerAlertStrengthChanged,
-            ),
-            const SizedBox(height: 14),
-            _DropdownSetting<DangerAlertMode>(
-              label: strings.dangerAlertMethod,
-              value: dangerAlertMode,
-              values: DangerAlertMode.values,
-              labelFor: strings.dangerAlertModeLabel,
-              enabled: dangerAlertStrength > 0,
-              onChanged: onDangerAlertModeChanged,
-            ),
-            const SizedBox(height: 14),
-            _CheckboxSetting(
-              label: strings.dangerAlertAcceleration,
-              value: dangerAlertAcceleration,
-              enabled: dangerAlertStrength > 0,
-              onChanged: onDangerAlertAccelerationChanged,
-            ),
           ],
         ),
       ),
