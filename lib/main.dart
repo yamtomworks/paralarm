@@ -26,7 +26,18 @@ enum ThresholdRule { above, below }
 
 enum AppMode { settings, countdown, monitoring, alerting }
 
-enum AppLanguage { japanese, english, chinese, spanish }
+enum AppLanguage {
+  japanese,
+  english,
+  chinese,
+  traditionalChinese,
+  spanish,
+  german,
+  french,
+  italian,
+  korean,
+  portuguese,
+}
 
 enum AlarmSoundOption { loudBeep, alert, click, off }
 
@@ -61,231 +72,1207 @@ class AppStrings {
 
   bool get isJapanese => appLanguage == AppLanguage.japanese;
   bool get isChinese => appLanguage == AppLanguage.chinese;
+  bool get isTraditionalChinese =>
+      appLanguage == AppLanguage.traditionalChinese;
   bool get isSpanish => appLanguage == AppLanguage.spanish;
+  bool get isGerman => appLanguage == AppLanguage.german;
+  bool get isFrench => appLanguage == AppLanguage.french;
+  bool get isItalian => appLanguage == AppLanguage.italian;
+  bool get isKorean => appLanguage == AppLanguage.korean;
+  bool get isPortuguese => appLanguage == AppLanguage.portuguese;
 
   String _text(
     String japanese,
     String english,
     String chinese,
-    String spanish,
-  ) {
-    if (isJapanese) {
-      return japanese;
-    }
-    if (isChinese) {
-      return chinese;
-    }
-    if (isSpanish) {
-      return spanish;
-    }
-    return english;
+    String spanish, {
+    String? traditionalChinese,
+    String? german,
+    String? french,
+    String? italian,
+    String? korean,
+    String? portuguese,
+  }) {
+    return switch (appLanguage) {
+      AppLanguage.japanese => japanese,
+      AppLanguage.english => english,
+      AppLanguage.chinese => chinese,
+      AppLanguage.traditionalChinese => traditionalChinese ?? chinese,
+      AppLanguage.spanish => spanish,
+      AppLanguage.german => german ?? english,
+      AppLanguage.french => french ?? english,
+      AppLanguage.italian => italian ?? english,
+      AppLanguage.korean => korean ?? english,
+      AppLanguage.portuguese => portuguese ?? english,
+    };
   }
 
-  String get settings => _text('設定', 'Settings', '设置', 'Ajustes');
-  String get tutorial => _text('チュートリアル', 'Tutorial', '教程', 'Tutorial');
+  String get settings => _text(
+    '設定',
+    'Settings',
+    '设置',
+    'Ajustes',
+    german: 'Einstellungen',
+    french: 'Réglages',
+    italian: 'Impostazioni',
+    korean: '설정',
+    traditionalChinese: '設定',
+    portuguese: 'Ajustes',
+  );
+  String get tutorial => _text(
+    'チュートリアル',
+    'Tutorial',
+    '教程',
+    'Tutorial',
+    german: 'Tutorial',
+    french: 'Tutoriel',
+    italian: 'Tutorial',
+    korean: '튜토리얼',
+    traditionalChinese: '教學',
+    portuguese: 'Tutorial',
+  );
   String get tutorialStartTitle => _text(
     '音量や振動を見張る',
     'Watch Volume or Vibration',
     '监测音量或振动',
     'Vigila volumen o vibración',
+    german: 'Lautstärke oder Vibration überwachen',
+    french: 'Surveiller le volume ou les vibrations',
+    italian: 'Controlla volume o vibrazione',
+    korean: '음량 또는 진동 감시',
+    traditionalChinese: '監測音量或震動',
+    portuguese: 'Monitore volume ou vibração',
   );
   String get tutorialStartBody => _text(
     'ターゲット、通知条件、閾値を決めてスタートします。現在値と閾値の関係はグラフで確認できます。',
     'Choose a target, condition, and threshold, then start. The chart shows how the current value relates to the threshold.',
     '选择目标、通知条件和阈值后开始。图表会显示当前值与阈值的关系。',
     'Elige objetivo, condición y umbral, y empieza. La gráfica muestra la relación entre el valor actual y el umbral.',
+    german:
+        'Wähle Ziel, Bedingung und Schwellenwert und starte. Das Diagramm zeigt das Verhältnis zwischen aktuellem Wert und Schwellenwert.',
+    french:
+        'Choisissez une cible, une condition et un seuil, puis démarrez. Le graphique montre le lien entre la valeur actuelle et le seuil.',
+    italian:
+        'Scegli target, condizione e soglia, poi avvia. Il grafico mostra il rapporto tra valore attuale e soglia.',
+    korean: '대상, 조건, 임계값을 정하고 시작하세요. 그래프에서 현재값과 임계값의 관계를 확인할 수 있습니다.',
+    traditionalChinese: '選擇目標、通知條件和閾值後開始。圖表會顯示目前值與閾值的關係。',
+    portuguese:
+        'Escolha um alvo, condição e limite, depois inicie. O gráfico mostra a relação entre o valor atual e o limite.',
   );
-  String get tutorialGraphTitle =>
-      _text('グラフで変化を確認', 'Watch the Chart', '通过图表确认变化', 'Observa la gráfica');
+  String get tutorialGraphTitle => _text(
+    'グラフで変化を確認',
+    'Watch the Chart',
+    '通过图表确认变化',
+    'Observa la gráfica',
+    german: 'Änderungen im Diagramm sehen',
+    french: 'Suivre les changements',
+    italian: 'Osserva il grafico',
+    korean: '그래프로 변화 확인',
+    traditionalChinese: '用圖表確認變化',
+    portuguese: 'Veja as mudanças no gráfico',
+  );
   String get tutorialGraphBody => _text(
     'リアルタイムの数値と閾値をグラフで確認できます。移動平均を強くすると、細かい揺れをなめらかにできます。',
     'The chart shows the live value and threshold together. Increase moving average strength to smooth small fluctuations.',
     '图表会同时显示实时数值和阈值。提高移动平均强度可以平滑细小波动。',
     'La gráfica muestra el valor en vivo y el umbral juntos. Aumenta la media móvil para suavizar pequeñas fluctuaciones.',
+    german:
+        'Das Diagramm zeigt Live-Wert und Schwellenwert zusammen. Erhöhe den gleitenden Durchschnitt, um kleine Schwankungen zu glätten.',
+    french:
+        'Le graphique affiche la valeur en direct et le seuil. Augmentez la moyenne mobile pour lisser les petites variations.',
+    italian:
+        'Il grafico mostra insieme valore live e soglia. Aumenta la media mobile per rendere più fluide le piccole variazioni.',
+    korean: '그래프에는 실시간 값과 임계값이 함께 표시됩니다. 이동 평균을 높이면 작은 흔들림을 부드럽게 만들 수 있습니다.',
+    traditionalChinese: '圖表會同時顯示即時數值和閾值。提高移動平均強度可以讓細小波動更平滑。',
+    portuguese:
+        'O gráfico mostra o valor ao vivo e o limite juntos. Aumente a média móvel para suavizar pequenas oscilações.',
   );
-  String get tutorialAlertTitle =>
-      _text('通知とプリセット', 'Alerts and Presets', '通知与预设', 'Alertas y preajustes');
+  String get tutorialAlertTitle => _text(
+    '通知とプリセット',
+    'Alerts and Presets',
+    '通知与预设',
+    'Alertas y preajustes',
+    german: 'Alarme und Presets',
+    french: 'Alertes et préréglages',
+    italian: 'Avvisi e preset',
+    korean: '알림과 프리셋',
+    traditionalChinese: '通知與預設',
+    portuguese: 'Alertas e predefinições',
+  );
   String get tutorialAlertBody => _text(
     '閾値に達すると音や振動で通知します。よく使う設定はプリセットに保存して、次回すぐにロードできます。',
     'When the threshold is reached, the app alerts with sound or vibration. Save favorite settings as presets and load them quickly next time.',
     '达到阈值时，应用会通过声音或振动提醒。常用设置可保存为预设，下次快速加载。',
     'Al alcanzar el umbral, la app avisa con sonido o vibración. Guarda ajustes frecuentes como preajustes y cárgalos rápido la próxima vez.',
+    german:
+        'Wenn der Schwellenwert erreicht wird, warnt die App mit Ton oder Vibration. Häufige Einstellungen kannst du als Preset speichern.',
+    french:
+        'Quand le seuil est atteint, l’app alerte par son ou vibration. Enregistrez vos réglages favoris comme préréglages.',
+    italian:
+        'Quando viene raggiunta la soglia, l’app avvisa con suono o vibrazione. Salva le impostazioni preferite come preset.',
+    korean: '임계값에 도달하면 소리나 진동으로 알립니다. 자주 쓰는 설정은 프리셋으로 저장해 빠르게 불러올 수 있습니다.',
+    traditionalChinese: '達到閾值時，應用程式會透過聲音或震動提醒。常用設定可儲存為預設，下次快速載入。',
+    portuguese:
+        'Quando o limite é atingido, o app alerta com som ou vibração. Salve ajustes favoritos como predefinições.',
   );
-  String get tutorialSafetyTitle =>
-      _text('安全に使う', 'Use Safely', '安全使用', 'Uso seguro');
+  String get tutorialSafetyTitle => _text(
+    '安全に使う',
+    'Use Safely',
+    '安全使用',
+    'Uso seguro',
+    german: 'Sicher verwenden',
+    french: 'Utilisation sûre',
+    italian: 'Usa in sicurezza',
+    korean: '안전하게 사용',
+    traditionalChinese: '安全使用',
+    portuguese: 'Use com segurança',
+  );
   String get tutorialSafetyBody => _text(
     '端末を投げたり、強く振り回したり、走行中や危険な場所で使用しないでください。事故や怪我、端末破損につながる可能性があります。',
     'Do not throw, swing, or use the device while running or in unsafe places. Misuse may cause accidents, injury, or device damage.',
     '请勿投掷、用力挥动设备，或在奔跑中、危险场所使用。本应用使用不当可能导致事故、受伤或设备损坏。',
     'No lances ni agites el dispositivo, ni lo uses mientras corres o en lugares peligrosos. Un uso indebido puede causar accidentes, lesiones o daños al dispositivo.',
+    german:
+        'Wirf oder schwenke das Gerät nicht und nutze es nicht beim Laufen oder an unsicheren Orten. Missbrauch kann Unfälle, Verletzungen oder Geräteschäden verursachen.',
+    french:
+        'Ne lancez pas et ne secouez pas fortement l’appareil. Ne l’utilisez pas en courant ou dans des lieux dangereux.',
+    italian:
+        'Non lanciare o agitare il dispositivo e non usarlo mentre corri o in luoghi pericolosi. Un uso improprio può causare incidenti, lesioni o danni.',
+    korean:
+        '기기를 던지거나 세게 흔들지 말고, 달리는 중이나 위험한 장소에서 사용하지 마세요. 사고, 부상 또는 기기 손상이 발생할 수 있습니다.',
+    traditionalChinese: '請勿投擲、用力揮動裝置，或在奔跑中、危險場所使用。使用不當可能導致事故、受傷或裝置損壞。',
+    portuguese:
+        'Não jogue, balance com força nem use o dispositivo correndo ou em locais perigosos. O uso indevido pode causar acidentes, lesões ou danos.',
   );
   String get tutorialPrivacyTitle => _text(
     'データは端末内で処理',
     'Processed on Device',
     '在设备上处理',
     'Procesado en el dispositivo',
+    german: 'Auf dem Gerät verarbeitet',
+    french: 'Traitement sur l’appareil',
+    italian: 'Elaborato sul dispositivo',
+    korean: '기기 내에서 처리',
+    traditionalChinese: '在裝置上處理',
+    portuguese: 'Processado no dispositivo',
   );
   String get tutorialPrivacyBody => _text(
     'マイク音声やカメラ映像は録音・保存・外部送信しません。音量判定やQR読み取りのために端末内でだけ使います。',
     'Microphone audio and camera video are not recorded, saved, or sent outside the app. They are used on device only for volume detection and QR scanning.',
     '麦克风音频和相机画面不会录制、保存或发送到外部。它们仅在设备上用于音量判断和 QR 读取。',
     'El audio del micrófono y el video de la cámara no se graban, guardan ni envían fuera de la app. Solo se usan en el dispositivo para medir volumen y leer QR.',
+    german:
+        'Mikrofon-Audio und Kameravideo werden nicht aufgenommen, gespeichert oder gesendet. Sie werden nur auf dem Gerät für Lautstärke und QR-Scan genutzt.',
+    french:
+        'L’audio du micro et la vidéo de la caméra ne sont ni enregistrés, ni stockés, ni envoyés hors de l’app. Ils servent seulement au volume et au scan QR.',
+    italian:
+        'Audio del microfono e video della fotocamera non vengono registrati, salvati o inviati fuori dall’app. Sono usati solo sul dispositivo.',
+    korean:
+        '마이크 음성과 카메라 영상은 녹음, 저장, 외부 전송되지 않습니다. 음량 판단과 QR 읽기에만 기기 내에서 사용됩니다.',
+    traditionalChinese: '麥克風音訊和相機畫面不會錄製、儲存或傳送到外部。僅在裝置上用於音量判斷和 QR 讀取。',
+    portuguese:
+        'Áudio do microfone e vídeo da câmera não são gravados, salvos nem enviados para fora do app. São usados apenas no dispositivo.',
   );
   String get tutorialPremiumTitle => _text(
     'Premiumでさらに便利に',
     'More with Premium',
     'Premium 提供更多功能',
     'Más con Premium',
+    german: 'Mehr mit Premium',
+    french: 'Plus avec Premium',
+    italian: 'Di più con Premium',
+    korean: 'Premium으로 더 편리하게',
+    traditionalChinese: 'Premium 更方便',
+    portuguese: 'Mais com Premium',
   );
   String get tutorialPremiumBody => _text(
     'Premiumでは危険域通知、3つの設定プリセット、QRコードでの設定共有、追加アラーム音が使えます。',
     'Premium unlocks danger zone alerts, three setting presets, QR setting sharing, and extra alarm sounds.',
     'Premium 可解锁危险区通知、3个设置预设、QR 设置分享以及更多警报音。',
     'Premium desbloquea alertas de zona de riesgo, tres preajustes, compartir ajustes por QR y sonidos de alarma adicionales.',
+    german:
+        'Premium schaltet Gefahrenzonen-Alarme, drei Presets, QR-Teilen und zusätzliche Alarmtöne frei.',
+    french:
+        'Premium débloque les alertes de zone à risque, trois préréglages, le partage QR et des sons d’alarme supplémentaires.',
+    italian:
+        'Premium sblocca avvisi di zona di rischio, tre preset, condivisione QR e suoni di allarme extra.',
+    korean: 'Premium에서는 위험 영역 알림, 설정 프리셋 3개, QR 설정 공유, 추가 알람음을 사용할 수 있습니다.',
+    traditionalChinese: 'Premium 可解鎖危險區通知、3 個設定預設、QR 設定分享以及更多警報音。',
+    portuguese:
+        'Premium desbloqueia alertas de zona de risco, três predefinições, compartilhamento por QR e sons extras.',
   );
-  String get next => _text('次へ', 'Next', '下一步', 'Siguiente');
-  String get begin => _text('はじめる', 'Begin', '开始', 'Empezar');
-  String get languageLabel => _text('言語', 'Language', '语言', 'Idioma');
-  String get presets =>
-      _text('設定プリセット', 'Setting Presets', '设置预设', 'Preajustes');
-  String get upgradeToPremium =>
-      _text('有料版にアップグレード', 'Upgrade to Premium', '升级到付费版', 'Mejorar a Premium');
-  String get premiumUnlocked =>
-      _text('有料版が有効です', 'Premium Enabled', '付费版已启用', 'Premium activo');
-  String get premiumRequired =>
-      _text('有料版限定機能', 'Premium Feature', '付费版功能', 'Función Premium');
+  String get next => _text(
+    '次へ',
+    'Next',
+    '下一步',
+    'Siguiente',
+    german: 'Weiter',
+    french: 'Suivant',
+    italian: 'Avanti',
+    korean: '다음',
+    traditionalChinese: '下一步',
+    portuguese: 'Próximo',
+  );
+  String get begin => _text(
+    'はじめる',
+    'Begin',
+    '开始',
+    'Empezar',
+    german: 'Beginnen',
+    french: 'Commencer',
+    italian: 'Inizia',
+    korean: '시작하기',
+    traditionalChinese: '開始',
+    portuguese: 'Começar',
+  );
+  String get languageLabel => _text(
+    '言語',
+    'Language',
+    '语言',
+    'Idioma',
+    german: 'Sprache',
+    french: 'Langue',
+    italian: 'Lingua',
+    korean: '언어',
+    traditionalChinese: '語言',
+    portuguese: 'Idioma',
+  );
+  String get presets => _text(
+    '設定プリセット',
+    'Setting Presets',
+    '设置预设',
+    'Preajustes',
+    german: 'Einstellungs-Presets',
+    french: 'Préréglages',
+    italian: 'Preset impostazioni',
+    korean: '설정 프리셋',
+    traditionalChinese: '設定預設',
+    portuguese: 'Predefinições',
+  );
+  String get upgradeToPremium => _text(
+    '有料版にアップグレード',
+    'Upgrade to Premium',
+    '升级到付费版',
+    'Mejorar a Premium',
+    german: 'Auf Premium upgraden',
+    french: 'Passer à Premium',
+    italian: 'Passa a Premium',
+    korean: 'Premium으로 업그레이드',
+    traditionalChinese: '升級到 Premium',
+    portuguese: 'Atualizar para Premium',
+  );
+  String get premiumUnlocked => _text(
+    '有料版が有効です',
+    'Premium Enabled',
+    '付费版已启用',
+    'Premium activo',
+    german: 'Premium aktiviert',
+    french: 'Premium activé',
+    italian: 'Premium attivo',
+    korean: 'Premium 활성화됨',
+    traditionalChinese: 'Premium 已啟用',
+    portuguese: 'Premium ativado',
+  );
+  String get premiumRequired => _text(
+    '有料版限定機能',
+    'Premium Feature',
+    '付费版功能',
+    'Función Premium',
+    german: 'Premium-Funktion',
+    french: 'Fonction Premium',
+    italian: 'Funzione Premium',
+    korean: 'Premium 기능',
+    traditionalChinese: 'Premium 功能',
+    portuguese: 'Recurso Premium',
+  );
   String get premiumRequiredBody => _text(
     'この機能を使うには有料版へのアップグレードが必要です。',
     'Upgrade to Premium to use this feature.',
     '使用此功能需要升级到付费版。',
     'Mejora a Premium para usar esta función.',
+    german: 'Upgrade auf Premium, um diese Funktion zu nutzen.',
+    french: 'Passez à Premium pour utiliser cette fonction.',
+    italian: 'Passa a Premium per usare questa funzione.',
+    korean: '이 기능을 사용하려면 Premium으로 업그레이드하세요.',
+    traditionalChinese: '使用此功能需要升級到 Premium。',
+    portuguese: 'Atualize para Premium para usar este recurso.',
   );
   String get upgradeDemoBody => _text(
     '現在は課金接続前のテスト実装です。OKを押すとこの端末で有料版として有効化します。',
     'This is a pre-store test implementation. Tap OK to enable Premium on this device.',
     '这是连接商店前的测试实现。点击 OK 将在此设备上启用付费版。',
     'Esta es una implementación de prueba antes de conectar la tienda. Toca OK para activar Premium en este dispositivo.',
+    german:
+        'Dies ist eine Testimplementierung vor der Store-Anbindung. Tippe OK, um Premium auf diesem Gerät zu aktivieren.',
+    french:
+        'Ceci est une implémentation de test avant la connexion au store. Touchez OK pour activer Premium sur cet appareil.',
+    italian:
+        'Questa è un’implementazione di test prima del collegamento allo store. Tocca OK per attivare Premium su questo dispositivo.',
+    korean: '스토어 연결 전 테스트 구현입니다. OK를 누르면 이 기기에서 Premium이 활성화됩니다.',
+    traditionalChinese: '這是連接商店前的測試實作。點選 OK 會在此裝置啟用 Premium。',
+    portuguese:
+        'Esta é uma implementação de teste antes da conexão com a loja. Toque em OK para ativar Premium neste dispositivo.',
   );
-  String get qrShow => _text('QR表示', 'Show QR', '显示QR', 'Mostrar QR');
-  String get qrScan => _text('QR読み取り', 'Scan QR', '扫描QR', 'Escanear QR');
-  String get qrInvalid =>
-      _text('QRコードを読み取れませんでした', 'Invalid QR code', '无法读取QR码', 'QR no válido');
-  String get cameraPermissionTitle =>
-      _text('カメラ利用の許可', 'Camera Access', '相机权限', 'Acceso a la cámara');
+  String get qrShow => _text(
+    'QR表示',
+    'Show QR',
+    '显示QR',
+    'Mostrar QR',
+    german: 'QR anzeigen',
+    french: 'Afficher QR',
+    italian: 'Mostra QR',
+    korean: 'QR 표시',
+    traditionalChinese: '顯示 QR',
+    portuguese: 'Mostrar QR',
+  );
+  String get qrScan => _text(
+    'QR読み取り',
+    'Scan QR',
+    '扫描QR',
+    'Escanear QR',
+    german: 'QR scannen',
+    french: 'Scanner QR',
+    italian: 'Scansiona QR',
+    korean: 'QR 스캔',
+    traditionalChinese: '掃描 QR',
+    portuguese: 'Ler QR',
+  );
+  String get qrInvalid => _text(
+    'QRコードを読み取れませんでした',
+    'Invalid QR code',
+    '无法读取QR码',
+    'QR no válido',
+    german: 'Ungültiger QR-Code',
+    french: 'Code QR invalide',
+    italian: 'Codice QR non valido',
+    korean: '잘못된 QR 코드',
+    traditionalChinese: '無效的 QR 碼',
+    portuguese: 'Código QR inválido',
+  );
+  String get cameraPermissionTitle => _text(
+    'カメラ利用の許可',
+    'Camera Access',
+    '相机权限',
+    'Acceso a la cámara',
+    german: 'Kamerazugriff',
+    french: 'Accès à la caméra',
+    italian: 'Accesso alla fotocamera',
+    korean: '카메라 접근',
+    traditionalChinese: '相機權限',
+    portuguese: 'Acesso à câmera',
+  );
   String get cameraPermissionBody => _text(
     'QRコードを読み取る時だけカメラを使用します。撮影した映像やQRコードの内容は外部へ送信せず、設定の読み込みにだけ使います。',
     'Camera access is used only while scanning QR codes. Video and QR contents are not sent outside the app and are used only to load settings.',
     '仅在扫描QR码时使用相机。视频和QR内容不会发送到应用外部，仅用于加载设置。',
     'La cámara se usa solo al escanear códigos QR. El video y el contenido del QR no se envían fuera de la app y solo se usan para cargar ajustes.',
+    german:
+        'Die Kamera wird nur beim Scannen von QR-Codes verwendet. Video und QR-Inhalte werden nicht außerhalb der App gesendet.',
+    french:
+        'La caméra est utilisée uniquement pour scanner les codes QR. La vidéo et le contenu QR ne sont pas envoyés hors de l’app.',
+    italian:
+        'La fotocamera viene usata solo per scansionare codici QR. Video e contenuto QR non vengono inviati fuori dall’app.',
+    korean:
+        '카메라는 QR 코드를 스캔할 때만 사용됩니다. 영상과 QR 내용은 앱 외부로 전송되지 않고 설정 불러오기에만 사용됩니다.',
+    traditionalChinese: '僅在掃描 QR 碼時使用相機。影片和 QR 內容不會傳送到應用程式外部，僅用於載入設定。',
+    portuguese:
+        'A câmera é usada apenas ao ler códigos QR. Vídeo e conteúdo do QR não são enviados para fora do app.',
   );
   String get cameraPermissionSettingsBody => _text(
     'カメラの使用が拒否されています。QRコードを読み取るには端末の設定でカメラを許可してください。カメラ映像は端末内で読み取りにだけ使い、保存や外部送信はしません。',
     'Camera access is denied. Allow it in device settings to scan QR codes. Camera video is processed on device only for scanning and is not saved or sent outside the app.',
     '相机权限已被拒绝。请在设备设置中允许相机以扫描QR码。相机画面仅在设备上用于读取，不会保存或发送到外部。',
     'El acceso a la cámara está denegado. Actívalo en los ajustes del dispositivo para escanear códigos QR. El video se procesa en el dispositivo solo para escanear y no se guarda ni se envía fuera de la app.',
+    german:
+        'Kamerazugriff wurde verweigert. Erlaube die Kamera in den Geräteeinstellungen, um QR-Codes zu scannen.',
+    french:
+        'L’accès à la caméra est refusé. Autorisez-le dans les réglages de l’appareil pour scanner les codes QR.',
+    italian:
+        'L’accesso alla fotocamera è negato. Consentilo nelle impostazioni del dispositivo per scansionare codici QR.',
+    korean: '카메라 접근이 거부되었습니다. QR 코드를 스캔하려면 기기 설정에서 카메라를 허용하세요.',
+    traditionalChinese: '相機權限已被拒絕。若要掃描 QR 碼，請在裝置設定中允許相機。',
+    portuguese:
+        'O acesso à câmera foi negado. Permita a câmera nos ajustes do dispositivo para ler códigos QR.',
   );
-  String get save => _text('保存', 'Save', '保存', 'Guardar');
-  String get load => _text('ロード', 'Load', '加载', 'Cargar');
-  String get rename => _text('名前変更', 'Rename', '重命名', 'Renombrar');
-  String get close => _text('閉じる', 'Close', '关闭', 'Cerrar');
+  String get save => _text(
+    '保存',
+    'Save',
+    '保存',
+    'Guardar',
+    german: 'Speichern',
+    french: 'Enregistrer',
+    italian: 'Salva',
+    korean: '저장',
+  );
+  String get load => _text(
+    'ロード',
+    'Load',
+    '加载',
+    'Cargar',
+    german: 'Laden',
+    french: 'Charger',
+    italian: 'Carica',
+    korean: '불러오기',
+  );
+  String get rename => _text(
+    '名前変更',
+    'Rename',
+    '重命名',
+    'Renombrar',
+    german: 'Umbenennen',
+    french: 'Renommer',
+    italian: 'Rinomina',
+    korean: '이름 변경',
+  );
+  String get close => _text(
+    '閉じる',
+    'Close',
+    '关闭',
+    'Cerrar',
+    german: 'Schließen',
+    french: 'Fermer',
+    italian: 'Chiudi',
+    korean: '닫기',
+  );
   String get ok => _text('OK', 'OK', 'OK', 'OK');
-  String get cancel => _text('キャンセル', 'Cancel', '取消', 'Cancelar');
-  String get emptySlot => _text('未保存', 'Empty', '空', 'Vacío');
-  String get presetName => _text('設定名', 'Preset Name', '预设名称', 'Nombre');
-  String get saved => _text('保存しました', 'Saved', '已保存', 'Guardado');
-  String get loaded => _text('ロードしました', 'Loaded', '已加载', 'Cargado');
-  String get renamed => _text('名前を変更しました', 'Renamed', '已重命名', 'Renombrado');
-  String get japanese => _text('日本語', 'Japanese', '日语', 'Japonés');
-  String get english => _text('英語', 'English', '英语', 'Inglés');
-  String get chinese => _text('中国語', 'Chinese', '中文', 'Chino');
-  String get spanish => _text('スペイン語', 'Spanish', '西班牙语', 'Español');
-  String get monitorSettings =>
-      _text('監視設定', 'Monitor Settings', '监测设置', 'Ajustes de monitoreo');
-  String get target => _text('ターゲット', 'Target', '目标', 'Objetivo');
-  String get sound => _text('音量', 'Volume', '音量', 'Volumen');
-  String get soundNotification => _text('音', 'Sound', '声音', 'Sonido');
-  String get vibration => _text('振動', 'Vibration', '振动', 'Vibración');
-  String get condition => _text('通知条件', 'Condition', '通知条件', 'Condición');
-  String get above => _text('以上', 'Above', '以上', 'Mayor');
-  String get below => _text('以下', 'Below', '以下', 'Menor');
-  String get threshold => _text('閾値', 'Threshold', '阈值', 'Umbral');
-  String get start => _text('スタート', 'Start', '开始', 'Iniciar');
-  String get countdown => _text('開始まで', 'Starting In', '距离开始', 'Comienza en');
-  String get countdownTime =>
-      _text('カウントダウン', 'Countdown', '倒计时', 'Cuenta regresiva');
-  String get monitoring =>
-      _text('モニタリング中', 'Monitoring', '监测中', 'Monitoreando');
-  String get realtimeTrend =>
-      _text('リアルタイム推移', 'Realtime Trend', '实时趋势', 'Tendencia en vivo');
-  String get currentValue => _text('現在値', 'Current', '当前值', 'Actual');
-  String get detectedValue => _text('検知値', 'Detected', '检测值', 'Detectado');
-  String get alerting => _text('通知中', 'Alerting', '通知中', 'Alertando');
-  String get back => _text('戻る', 'Back', '返回', 'Volver');
-  String get backToSettings =>
-      _text('設定に戻る', 'Back to Settings', '返回设置', 'Volver a ajustes');
-  String get advancedSettings =>
-      _text('詳細設定', 'Advanced Settings', '高级设置', 'Ajustes avanzados');
-  String get alarmSound =>
-      _text('アラーム音', 'Alarm Sound', '警报声音', 'Sonido de alarma');
-  String get vibrationPattern =>
-      _text('振動パターン', 'Vibration Pattern', '振动模式', 'Patrón de vibración');
-  String get previewSound =>
-      _text('音を確認', 'Preview Sound', '预览声音', 'Probar sonido');
-  String get movingAverage =>
-      _text('移動平均', 'Moving Average', '移动平均', 'Media móvil');
-  String get dangerAlert =>
-      _text('危険域通知', 'Danger Zone Alert', '危险区通知', 'Alerta de zona de riesgo');
-  String get dangerAlertMethod =>
-      _text('通知方法', 'Alert Method', '通知方式', 'Método');
+  String get cancel => _text(
+    'キャンセル',
+    'Cancel',
+    '取消',
+    'Cancelar',
+    german: 'Abbrechen',
+    french: 'Annuler',
+    italian: 'Annulla',
+    korean: '취소',
+  );
+  String get emptySlot => _text(
+    '未保存',
+    'Empty',
+    '空',
+    'Vacío',
+    german: 'Leer',
+    french: 'Vide',
+    italian: 'Vuoto',
+    korean: '비어 있음',
+  );
+  String get presetName => _text(
+    '設定名',
+    'Preset Name',
+    '预设名称',
+    'Nombre',
+    german: 'Preset-Name',
+    french: 'Nom du préréglage',
+    italian: 'Nome preset',
+    korean: '프리셋 이름',
+  );
+  String get saved => _text(
+    '保存しました',
+    'Saved',
+    '已保存',
+    'Guardado',
+    german: 'Gespeichert',
+    french: 'Enregistré',
+    italian: 'Salvato',
+    korean: '저장됨',
+  );
+  String get loaded => _text(
+    'ロードしました',
+    'Loaded',
+    '已加载',
+    'Cargado',
+    german: 'Geladen',
+    french: 'Chargé',
+    italian: 'Caricato',
+    korean: '불러옴',
+  );
+  String get renamed => _text(
+    '名前を変更しました',
+    'Renamed',
+    '已重命名',
+    'Renombrado',
+    german: 'Umbenannt',
+    french: 'Renommé',
+    italian: 'Rinominato',
+    korean: '이름 변경됨',
+  );
+  String get japanese => _text(
+    '日本語',
+    'Japanese',
+    '日语',
+    'Japonés',
+    german: 'Japanisch',
+    french: 'Japonais',
+    italian: 'Giapponese',
+    korean: '일본어',
+    traditionalChinese: '日文',
+    portuguese: 'Japonês',
+  );
+  String get english => _text(
+    '英語',
+    'English',
+    '英语',
+    'Inglés',
+    german: 'Englisch',
+    french: 'Anglais',
+    italian: 'Inglese',
+    korean: '영어',
+    traditionalChinese: '英文',
+    portuguese: 'Inglês',
+  );
+  String get chinese => _text(
+    '中国語',
+    'Chinese',
+    '中文',
+    'Chino',
+    german: 'Chinesisch',
+    french: 'Chinois',
+    italian: 'Cinese',
+    korean: '중국어',
+    traditionalChinese: '簡體中文',
+    portuguese: 'Chinês',
+  );
+  String get traditionalChinese => _text(
+    '中国語（繁体字）',
+    'Traditional Chinese',
+    '繁体中文',
+    'Chino tradicional',
+    german: 'Traditionelles Chinesisch',
+    french: 'Chinois traditionnel',
+    italian: 'Cinese tradizionale',
+    korean: '중국어 번체',
+    traditionalChinese: '繁體中文',
+    portuguese: 'Chinês tradicional',
+  );
+  String get spanish => _text(
+    'スペイン語',
+    'Spanish',
+    '西班牙语',
+    'Español',
+    german: 'Spanisch',
+    french: 'Espagnol',
+    italian: 'Spagnolo',
+    korean: '스페인어',
+    traditionalChinese: '西班牙文',
+    portuguese: 'Espanhol',
+  );
+  String get german => _text(
+    'ドイツ語',
+    'German',
+    '德语',
+    'Alemán',
+    german: 'Deutsch',
+    french: 'Allemand',
+    italian: 'Tedesco',
+    korean: '독일어',
+    traditionalChinese: '德文',
+    portuguese: 'Alemão',
+  );
+  String get french => _text(
+    'フランス語',
+    'French',
+    '法语',
+    'Francés',
+    german: 'Französisch',
+    french: 'Français',
+    italian: 'Francese',
+    korean: '프랑스어',
+    traditionalChinese: '法文',
+    portuguese: 'Francês',
+  );
+  String get italian => _text(
+    'イタリア語',
+    'Italian',
+    '意大利语',
+    'Italiano',
+    german: 'Italienisch',
+    french: 'Italien',
+    italian: 'Italiano',
+    korean: '이탈리아어',
+    traditionalChinese: '義大利文',
+    portuguese: 'Italiano',
+  );
+  String get korean => _text(
+    '韓国語',
+    'Korean',
+    '韩语',
+    'Coreano',
+    german: 'Koreanisch',
+    french: 'Coréen',
+    italian: 'Coreano',
+    korean: '한국어',
+    traditionalChinese: '韓文',
+    portuguese: 'Coreano',
+  );
+  String get portuguese => _text(
+    'ポルトガル語',
+    'Portuguese',
+    '葡萄牙语',
+    'Portugués',
+    german: 'Portugiesisch',
+    french: 'Portugais',
+    italian: 'Portoghese',
+    korean: '포르투갈어',
+    traditionalChinese: '葡萄牙文',
+    portuguese: 'Português',
+  );
+  String get monitorSettings => _text(
+    '監視設定',
+    'Monitor Settings',
+    '监测设置',
+    'Ajustes de monitoreo',
+    german: 'Überwachung',
+    french: 'Réglages de surveillance',
+    italian: 'Impostazioni monitoraggio',
+    korean: '모니터링 설정',
+    traditionalChinese: '監測設定',
+    portuguese: 'Ajustes de monitoramento',
+  );
+  String get target => _text(
+    'ターゲット',
+    'Target',
+    '目标',
+    'Objetivo',
+    german: 'Ziel',
+    french: 'Cible',
+    italian: 'Target',
+    korean: '대상',
+    traditionalChinese: '目標',
+    portuguese: 'Alvo',
+  );
+  String get sound => _text(
+    '音量',
+    'Volume',
+    '音量',
+    'Volumen',
+    german: 'Lautstärke',
+    french: 'Volume',
+    italian: 'Volume',
+    korean: '음량',
+    traditionalChinese: '音量',
+    portuguese: 'Volume',
+  );
+  String get soundNotification => _text(
+    '音',
+    'Sound',
+    '声音',
+    'Sonido',
+    german: 'Ton',
+    french: 'Son',
+    italian: 'Suono',
+    korean: '소리',
+    traditionalChinese: '聲音',
+    portuguese: 'Som',
+  );
+  String get vibration => _text(
+    '振動',
+    'Vibration',
+    '振动',
+    'Vibración',
+    german: 'Vibration',
+    french: 'Vibration',
+    italian: 'Vibrazione',
+    korean: '진동',
+    traditionalChinese: '震動',
+    portuguese: 'Vibração',
+  );
+  String get condition => _text(
+    '通知条件',
+    'Condition',
+    '通知条件',
+    'Condición',
+    german: 'Bedingung',
+    french: 'Condition',
+    italian: 'Condizione',
+    korean: '알림 조건',
+    traditionalChinese: '通知條件',
+    portuguese: 'Condição',
+  );
+  String get above => _text(
+    '以上',
+    'Above',
+    '以上',
+    'Mayor',
+    german: 'Über',
+    french: 'Au-dessus',
+    italian: 'Sopra',
+    korean: '이상',
+    traditionalChinese: '高於',
+    portuguese: 'Acima',
+  );
+  String get below => _text(
+    '以下',
+    'Below',
+    '以下',
+    'Menor',
+    german: 'Unter',
+    french: 'En dessous',
+    italian: 'Sotto',
+    korean: '이하',
+    traditionalChinese: '低於',
+    portuguese: 'Abaixo',
+  );
+  String get threshold => _text(
+    '閾値',
+    'Threshold',
+    '阈值',
+    'Umbral',
+    german: 'Schwelle',
+    french: 'Seuil',
+    italian: 'Soglia',
+    korean: '임계값',
+    traditionalChinese: '閾值',
+    portuguese: 'Limite',
+  );
+  String get start => _text(
+    'スタート',
+    'Start',
+    '开始',
+    'Iniciar',
+    german: 'Start',
+    french: 'Démarrer',
+    italian: 'Avvia',
+    korean: '시작',
+    traditionalChinese: '開始',
+    portuguese: 'Iniciar',
+  );
+  String get countdown => _text(
+    '開始まで',
+    'Starting In',
+    '距离开始',
+    'Comienza en',
+    german: 'Start in',
+    french: 'Début dans',
+    italian: 'Inizia tra',
+    korean: '시작까지',
+    traditionalChinese: '距離開始',
+    portuguese: 'Inicia em',
+  );
+  String get countdownTime => _text(
+    'カウントダウン',
+    'Countdown',
+    '倒计时',
+    'Cuenta regresiva',
+    german: 'Countdown',
+    french: 'Compte à rebours',
+    italian: 'Conto alla rovescia',
+    korean: '카운트다운',
+    traditionalChinese: '倒數計時',
+    portuguese: 'Contagem regressiva',
+  );
+  String get monitoring => _text(
+    'モニタリング中',
+    'Monitoring',
+    '监测中',
+    'Monitoreando',
+    german: 'Überwachung',
+    french: 'Surveillance',
+    italian: 'Monitoraggio',
+    korean: '모니터링 중',
+    traditionalChinese: '監測中',
+    portuguese: 'Monitorando',
+  );
+  String get realtimeTrend => _text(
+    'リアルタイム推移',
+    'Realtime Trend',
+    '实时趋势',
+    'Tendencia en vivo',
+    german: 'Live-Verlauf',
+    french: 'Tendance en direct',
+    italian: 'Andamento live',
+    korean: '실시간 추이',
+    traditionalChinese: '即時趨勢',
+    portuguese: 'Tendência em tempo real',
+  );
+  String get currentValue => _text(
+    '現在値',
+    'Current',
+    '当前值',
+    'Actual',
+    german: 'Aktuell',
+    french: 'Actuel',
+    italian: 'Attuale',
+    korean: '현재값',
+    traditionalChinese: '目前值',
+    portuguese: 'Atual',
+  );
+  String get detectedValue => _text(
+    '検知値',
+    'Detected',
+    '检测值',
+    'Detectado',
+    german: 'Erkannt',
+    french: 'Détecté',
+    italian: 'Rilevato',
+    korean: '감지값',
+    traditionalChinese: '偵測值',
+    portuguese: 'Detectado',
+  );
+  String get alerting => _text(
+    '通知中',
+    'Alerting',
+    '通知中',
+    'Alertando',
+    german: 'Alarm',
+    french: 'Alerte',
+    italian: 'Avviso',
+    korean: '알림 중',
+    traditionalChinese: '通知中',
+    portuguese: 'Alertando',
+  );
+  String get back => _text(
+    '戻る',
+    'Back',
+    '返回',
+    'Volver',
+    german: 'Zurück',
+    french: 'Retour',
+    italian: 'Indietro',
+    korean: '뒤로',
+    traditionalChinese: '返回',
+    portuguese: 'Voltar',
+  );
+  String get backToSettings => _text(
+    '設定に戻る',
+    'Back to Settings',
+    '返回设置',
+    'Volver a ajustes',
+    german: 'Zurück zu Einstellungen',
+    french: 'Retour aux réglages',
+    italian: 'Torna alle impostazioni',
+    korean: '설정으로 돌아가기',
+    traditionalChinese: '返回設定',
+    portuguese: 'Voltar aos ajustes',
+  );
+  String get advancedSettings => _text(
+    '詳細設定',
+    'Advanced Settings',
+    '高级设置',
+    'Ajustes avanzados',
+    german: 'Erweiterte Einstellungen',
+    french: 'Réglages avancés',
+    italian: 'Impostazioni avanzate',
+    korean: '상세 설정',
+    traditionalChinese: '進階設定',
+    portuguese: 'Ajustes avançados',
+  );
+  String get alarmSound => _text(
+    'アラーム音',
+    'Alarm Sound',
+    '警报声音',
+    'Sonido de alarma',
+    german: 'Alarmton',
+    french: 'Son d’alarme',
+    italian: 'Suono allarme',
+    korean: '알람음',
+    traditionalChinese: '警報音',
+    portuguese: 'Som do alarme',
+  );
+  String get vibrationPattern => _text(
+    '振動パターン',
+    'Vibration Pattern',
+    '振动模式',
+    'Patrón de vibración',
+    german: 'Vibrationsmuster',
+    french: 'Motif de vibration',
+    italian: 'Schema vibrazione',
+    korean: '진동 패턴',
+    traditionalChinese: '震動模式',
+    portuguese: 'Padrão de vibração',
+  );
+  String get previewSound => _text(
+    '音を確認',
+    'Preview Sound',
+    '预览声音',
+    'Probar sonido',
+    german: 'Ton testen',
+    french: 'Tester le son',
+    italian: 'Prova suono',
+    korean: '소리 미리듣기',
+    traditionalChinese: '預覽聲音',
+    portuguese: 'Testar som',
+  );
+  String get movingAverage => _text(
+    '移動平均',
+    'Moving Average',
+    '移动平均',
+    'Media móvil',
+    german: 'Gleitender Durchschnitt',
+    french: 'Moyenne mobile',
+    italian: 'Media mobile',
+    korean: '이동 평균',
+    traditionalChinese: '移動平均',
+    portuguese: 'Média móvel',
+  );
+  String get dangerAlert => _text(
+    '危険域通知',
+    'Danger Zone Alert',
+    '危险区通知',
+    'Alerta de zona de riesgo',
+    german: 'Gefahrenzonen-Alarm',
+    french: 'Alerte zone à risque',
+    italian: 'Avviso zona rischio',
+    korean: '위험 영역 알림',
+    traditionalChinese: '危險區通知',
+    portuguese: 'Alerta de zona de risco',
+  );
+  String get dangerAlertMethod => _text(
+    '通知方法',
+    'Alert Method',
+    '通知方式',
+    'Método',
+    german: 'Alarmmethode',
+    french: 'Méthode',
+    italian: 'Metodo',
+    korean: '알림 방법',
+    traditionalChinese: '通知方法',
+    portuguese: 'Método',
+  );
   String get dangerAlertAcceleration => _text(
     '危険域通知加速',
     'Danger Alert Acceleration',
     '危险区通知加速',
     'Aceleración de alerta',
+    german: 'Gefahrenalarm-Beschleunigung',
+    french: 'Accélération d’alerte',
+    italian: 'Accelerazione avviso',
+    korean: '위험 알림 가속',
+    traditionalChinese: '危險區通知加速',
+    portuguese: 'Aceleração de alerta',
   );
-  String get adPlaceholder => _text('広告', 'Ad', '广告', 'Anuncio');
+  String get adPlaceholder => _text(
+    '広告',
+    'Ad',
+    '广告',
+    'Anuncio',
+    german: 'Anzeige',
+    french: 'Pub',
+    italian: 'Annuncio',
+    korean: '광고',
+    traditionalChinese: '廣告',
+    portuguese: 'Anúncio',
+  );
   String get off => 'Off';
-  String get soundLoudBeep =>
-      _text('連続ビープ', 'Loud Beep', '连续哔声', 'Pitido fuerte');
-  String get soundAlert => _text('アラート', 'Alert', '警报', 'Alerta');
-  String get soundClick => _text('クリック', 'Click', '点击', 'Clic');
-  String get vibrationUrgent => _text('強い連続', 'Urgent', '强连续', 'Urgente');
-  String get vibrationPulse => _text('短いパルス', 'Pulse', '短脉冲', 'Pulso');
-  String get vibrationLong => _text('長め', 'Long', '较长', 'Larga');
-  String get both =>
-      _text('音＆振動', 'Sound & Vibration', '声音＆振动', 'Sonido y vibración');
-  String get microphonePermissionTitle =>
-      _text('マイク利用の許可', 'Microphone Access', '麦克风权限', 'Acceso al micrófono');
+  String get soundLoudBeep => _text(
+    '連続ビープ',
+    'Loud Beep',
+    '连续哔声',
+    'Pitido fuerte',
+    german: 'Lauter Piepton',
+    french: 'Bip fort',
+    italian: 'Bip forte',
+    korean: '연속 비프',
+    traditionalChinese: '連續嗶聲',
+    portuguese: 'Bipe alto',
+  );
+  String get soundAlert => _text(
+    'アラート',
+    'Alert',
+    '警报',
+    'Alerta',
+    german: 'Alarm',
+    french: 'Alerte',
+    italian: 'Allarme',
+    korean: '알림',
+    traditionalChinese: '警報',
+    portuguese: 'Alerta',
+  );
+  String get soundClick => _text(
+    'クリック',
+    'Click',
+    '点击',
+    'Clic',
+    german: 'Klick',
+    french: 'Clic',
+    italian: 'Clic',
+    korean: '클릭',
+    traditionalChinese: '點擊',
+    portuguese: 'Clique',
+  );
+  String get vibrationUrgent => _text(
+    '強い連続',
+    'Urgent',
+    '强连续',
+    'Urgente',
+    german: 'Dringend',
+    french: 'Urgent',
+    italian: 'Urgente',
+    korean: '강한 연속',
+    traditionalChinese: '強連續',
+    portuguese: 'Urgente',
+  );
+  String get vibrationPulse => _text(
+    '短いパルス',
+    'Pulse',
+    '短脉冲',
+    'Pulso',
+    german: 'Impuls',
+    french: 'Impulsion',
+    italian: 'Impulso',
+    korean: '짧은 펄스',
+    traditionalChinese: '短脈衝',
+    portuguese: 'Pulso',
+  );
+  String get vibrationLong => _text(
+    '長め',
+    'Long',
+    '较长',
+    'Larga',
+    german: 'Lang',
+    french: 'Longue',
+    italian: 'Lunga',
+    korean: '길게',
+    traditionalChinese: '較長',
+    portuguese: 'Longa',
+  );
+  String get both => _text(
+    '音＆振動',
+    'Sound & Vibration',
+    '声音＆振动',
+    'Sonido y vibración',
+    german: 'Ton & Vibration',
+    french: 'Son et vibration',
+    italian: 'Suono e vibrazione',
+    korean: '소리 및 진동',
+    traditionalChinese: '聲音與震動',
+    portuguese: 'Som e vibração',
+  );
+  String get microphonePermissionTitle => _text(
+    'マイク利用の許可',
+    'Microphone Access',
+    '麦克风权限',
+    'Acceso al micrófono',
+    german: 'Mikrofonzugriff',
+    french: 'Accès au micro',
+    italian: 'Accesso al microfono',
+    korean: '마이크 접근',
+    traditionalChinese: '麥克風權限',
+    portuguese: 'Acesso ao microfone',
+  );
   String get microphonePermissionBody => _text(
     '音量を監視するにはマイクの使用許可が必要です。音声は録音・保存せず、端末内で音量レベルの計算にだけ使います。次の確認で許可してください。',
     'Microphone access is required to monitor volume. Audio is not recorded or saved; it is used on device only to calculate volume level. Please allow it on the next prompt.',
     '监测音量需要麦克风权限。不会录音或保存音频，仅在设备上用于计算音量级别。请在接下来的提示中允许。',
     'Se necesita acceso al micrófono para monitorear el volumen. El audio no se graba ni se guarda; solo se usa en el dispositivo para calcular el nivel de volumen. Permítelo en el siguiente aviso.',
+    german:
+        'Zum Überwachen der Lautstärke ist Mikrofonzugriff erforderlich. Audio wird nicht aufgenommen oder gespeichert, sondern nur auf dem Gerät berechnet.',
+    french:
+        'L’accès au micro est nécessaire pour surveiller le volume. L’audio n’est ni enregistré ni stocké, il sert seulement au calcul sur l’appareil.',
+    italian:
+        'Per monitorare il volume serve l’accesso al microfono. L’audio non viene registrato o salvato, ma usato solo sul dispositivo.',
+    korean: '음량을 모니터링하려면 마이크 접근이 필요합니다. 오디오는 녹음 또는 저장되지 않고 기기 내 음량 계산에만 사용됩니다.',
+    traditionalChinese: '監測音量需要麥克風權限。音訊不會錄製或儲存，僅在裝置上用於計算音量級別。',
+    portuguese:
+        'O acesso ao microfone é necessário para monitorar o volume. O áudio não é gravado nem salvo; é usado apenas no dispositivo.',
   );
   String get microphonePermissionSettingsBody => _text(
     'マイクの使用が拒否されています。音量を監視するには端末の設定でマイクを許可してください。音声は録音・保存・外部送信せず、音量レベルの判定にだけ使います。',
     'Microphone access is denied. Allow it in device settings to monitor volume. Audio is not recorded, saved, or sent outside the app; it is used only to judge volume level.',
     '麦克风权限已被拒绝。请在设备设置中允许麦克风以监测音量。音频不会录制、保存或发送到外部，仅用于判断音量级别。',
     'El acceso al micrófono está denegado. Actívalo en los ajustes del dispositivo para monitorear el volumen. El audio no se graba, guarda ni se envía fuera de la app; solo se usa para medir el nivel de volumen.',
+    german:
+        'Mikrofonzugriff wurde verweigert. Erlaube das Mikrofon in den Geräteeinstellungen. Audio wird nicht gespeichert oder gesendet.',
+    french:
+        'L’accès au micro est refusé. Autorisez-le dans les réglages de l’appareil. L’audio n’est pas enregistré ni envoyé hors de l’app.',
+    italian:
+        'L’accesso al microfono è negato. Consentilo nelle impostazioni del dispositivo. L’audio non viene salvato o inviato fuori dall’app.',
+    korean:
+        '마이크 접근이 거부되었습니다. 음량을 모니터링하려면 기기 설정에서 마이크를 허용하세요. 오디오는 저장되거나 외부로 전송되지 않습니다.',
+    traditionalChinese: '麥克風權限已被拒絕。若要監測音量，請在裝置設定中允許麥克風。音訊不會儲存或傳送到外部。',
+    portuguese:
+        'O acesso ao microfone foi negado. Permita o microfone nos ajustes do dispositivo. O áudio não é salvo nem enviado para fora do app.',
   );
-  String get allow => _text('許可する', 'Allow', '允许', 'Permitir');
-  String get later => _text('あとで', 'Later', '稍后', 'Más tarde');
-  String get openSettings =>
-      _text('設定を開く', 'Open Settings', '打开设置', 'Abrir ajustes');
-  String get zeroVolumeTitle =>
-      _text('音量がゼロです', 'Volume Is Zero', '音量为零', 'El volumen está en cero');
+  String get allow => _text(
+    '許可する',
+    'Allow',
+    '允许',
+    'Permitir',
+    german: 'Erlauben',
+    french: 'Autoriser',
+    italian: 'Consenti',
+    korean: '허용',
+    traditionalChinese: '允許',
+    portuguese: 'Permitir',
+  );
+  String get later => _text(
+    'あとで',
+    'Later',
+    '稍后',
+    'Más tarde',
+    german: 'Später',
+    french: 'Plus tard',
+    italian: 'Più tardi',
+    korean: '나중에',
+    traditionalChinese: '稍後',
+    portuguese: 'Mais tarde',
+  );
+  String get openSettings => _text(
+    '設定を開く',
+    'Open Settings',
+    '打开设置',
+    'Abrir ajustes',
+    german: 'Einstellungen öffnen',
+    french: 'Ouvrir les réglages',
+    italian: 'Apri impostazioni',
+    korean: '설정 열기',
+    traditionalChinese: '開啟設定',
+    portuguese: 'Abrir ajustes',
+  );
+  String get zeroVolumeTitle => _text(
+    '音量がゼロです',
+    'Volume Is Zero',
+    '音量为零',
+    'El volumen está en cero',
+    german: 'Lautstärke ist null',
+    french: 'Volume à zéro',
+    italian: 'Volume a zero',
+    korean: '음량이 0입니다',
+    traditionalChinese: '音量為零',
+    portuguese: 'Volume está zero',
+  );
   String get zeroVolumeBody => _text(
     'アラーム音を鳴らす設定ですが、スマホの音量がゼロです。このまま開始しますか？',
     'Alarm sound is enabled, but the phone volume is zero. Start anyway?',
     '已启用警报声音，但手机音量为零。仍要开始吗？',
     'El sonido de alarma está activado, pero el volumen del teléfono está en cero. ¿Iniciar de todos modos?',
+    german:
+        'Alarmton ist aktiviert, aber die Lautstärke des Smartphones ist null. Trotzdem starten?',
+    french:
+        'Le son d’alarme est activé, mais le volume du téléphone est à zéro. Démarrer quand même ?',
+    italian:
+        'Il suono di allarme è attivo, ma il volume del telefono è a zero. Avviare comunque?',
+    korean: '알람음이 켜져 있지만 휴대폰 음량이 0입니다. 그래도 시작할까요?',
+    traditionalChinese: '已啟用警報音，但手機音量為零。仍要開始嗎？',
+    portuguese:
+        'O som do alarme está ativado, mas o volume do telefone está zero. Iniciar mesmo assim?',
   );
 
   String countdownLabel(int seconds) {
     if (seconds == 0) {
-      return _text('0秒 (Off)', '0 sec (Off)', '0秒 (Off)', '0 s (Off)');
+      return _text(
+        '0秒 (Off)',
+        '0 sec (Off)',
+        '0秒 (Off)',
+        '0 s (Off)',
+        german: '0 Sek. (Off)',
+        french: '0 s (Off)',
+        italian: '0 s (Off)',
+        korean: '0초 (Off)',
+        traditionalChinese: '0秒 (Off)',
+        portuguese: '0 s (Off)',
+      );
     }
-    return _text('$seconds秒', '$seconds sec', '$seconds秒', '$seconds s');
+    return _text(
+      '$seconds秒',
+      '$seconds sec',
+      '$seconds秒',
+      '$seconds s',
+      german: '$seconds Sek.',
+      french: '$seconds s',
+      italian: '$seconds s',
+      korean: '$seconds초',
+      traditionalChinese: '$seconds秒',
+      portuguese: '$seconds s',
+    );
   }
 
   String movingAverageLabel(int strength) {
@@ -297,6 +1284,12 @@ class AppStrings {
       'Strength $strength',
       '强度 $strength',
       'Intensidad $strength',
+      german: 'Stärke $strength',
+      french: 'Intensité $strength',
+      italian: 'Intensità $strength',
+      korean: '강도 $strength',
+      traditionalChinese: '強度 $strength',
+      portuguese: 'Intensidade $strength',
     );
   }
 
@@ -305,6 +1298,12 @@ class AppStrings {
     'Slot ${index + 1}',
     '槽位 ${index + 1}',
     'Ranura ${index + 1}',
+    german: 'Slot ${index + 1}',
+    french: 'Emplacement ${index + 1}',
+    italian: 'Slot ${index + 1}',
+    korean: '슬롯 ${index + 1}',
+    traditionalChinese: '槽位 ${index + 1}',
+    portuguese: 'Slot ${index + 1}',
   );
 
   String alarmSoundLabel(AlarmSoundOption option) {
@@ -338,14 +1337,32 @@ class AppStrings {
     'Current $targetLabel',
     '当前$targetLabel',
     '$targetLabel actual',
+    german: 'Aktuelle $targetLabel',
+    french: '$targetLabel actuel',
+    italian: '$targetLabel attuale',
+    korean: '현재 $targetLabel',
+    traditionalChinese: '目前$targetLabel',
+    portuguese: '$targetLabel atual',
   );
 
   String alertRemaining(double remaining, String unit) => isJapanese
       ? '通知まであと ${remaining.toStringAsFixed(1)} $unit'
       : isChinese
       ? '距离通知还有 ${remaining.toStringAsFixed(1)} $unit'
+      : isTraditionalChinese
+      ? '距離通知還有 ${remaining.toStringAsFixed(1)} $unit'
       : isSpanish
       ? 'Faltan ${remaining.toStringAsFixed(1)} $unit para la alerta'
+      : isGerman
+      ? 'Noch ${remaining.toStringAsFixed(1)} $unit bis zum Alarm'
+      : isFrench
+      ? 'Encore ${remaining.toStringAsFixed(1)} $unit avant l’alerte'
+      : isItalian
+      ? 'Mancano ${remaining.toStringAsFixed(1)} $unit all’avviso'
+      : isKorean
+      ? '알림까지 ${remaining.toStringAsFixed(1)} $unit 남음'
+      : isPortuguese
+      ? 'Faltam ${remaining.toStringAsFixed(1)} $unit para o alerta'
       : '${remaining.toStringAsFixed(1)} $unit until alert';
 
   String conditionDescription(
@@ -356,40 +1373,100 @@ class AppStrings {
       ? '$threshold $unit $ruleLabel で通知します'
       : isChinese
       ? '当 $ruleLabel ${threshold.toStringAsFixed(1)} $unit 时通知'
+      : isTraditionalChinese
+      ? '當 $ruleLabel ${threshold.toStringAsFixed(1)} $unit 時通知'
       : isSpanish
       ? 'Alertar cuando sea $ruleLabel ${threshold.toStringAsFixed(1)} $unit'
+      : isGerman
+      ? 'Alarm bei $ruleLabel ${threshold.toStringAsFixed(1)} $unit'
+      : isFrench
+      ? 'Alerte si $ruleLabel ${threshold.toStringAsFixed(1)} $unit'
+      : isItalian
+      ? 'Avvisa quando $ruleLabel ${threshold.toStringAsFixed(1)} $unit'
+      : isKorean
+      ? '${threshold.toStringAsFixed(1)} $unit $ruleLabel 때 알림'
+      : isPortuguese
+      ? 'Alertar quando for $ruleLabel ${threshold.toStringAsFixed(1)} $unit'
       : 'Alert when $ruleLabel ${threshold.toStringAsFixed(1)} $unit';
 
   String alertMessage(String targetLabel, String ruleLabel) => isJapanese
       ? '$targetLabel が閾値$ruleLabelになりました'
       : isChinese
       ? '$targetLabel 已达到阈值$ruleLabel'
+      : isTraditionalChinese
+      ? '$targetLabel 已達到閾值$ruleLabel'
       : isSpanish
       ? '$targetLabel alcanzó el umbral $ruleLabel'
+      : isGerman
+      ? '$targetLabel hat die Schwelle $ruleLabel erreicht'
+      : isFrench
+      ? '$targetLabel a atteint le seuil $ruleLabel'
+      : isItalian
+      ? '$targetLabel ha raggiunto la soglia $ruleLabel'
+      : isKorean
+      ? '$targetLabel이 임계값 $ruleLabel에 도달했습니다'
+      : isPortuguese
+      ? '$targetLabel atingiu o limite $ruleLabel'
       : '$targetLabel reached the $ruleLabel threshold';
 
   String get microphoneDenied => isJapanese
       ? 'マイクの使用が許可されていません。音声は録音・保存せず音量判定にだけ使用します。端末の設定から許可してください。'
       : isChinese
       ? '未允许使用麦克风。音频不会录制或保存，仅用于音量判断。请在设备设置中允许。'
+      : isTraditionalChinese
+      ? '未允許使用麥克風。音訊不會錄製或儲存，僅用於音量判斷。請在裝置設定中允許。'
       : isSpanish
       ? 'El acceso al micrófono no está permitido. El audio no se graba ni se guarda; solo se usa para medir volumen. Actívalo en los ajustes del dispositivo.'
+      : isGerman
+      ? 'Mikrofonzugriff ist nicht erlaubt. Audio wird nicht aufgenommen oder gespeichert und nur zur Lautstärkebewertung genutzt. Bitte in den Geräteeinstellungen erlauben.'
+      : isFrench
+      ? 'L’accès au micro n’est pas autorisé. L’audio n’est ni enregistré ni stocké et sert seulement à mesurer le volume. Autorisez-le dans les réglages.'
+      : isItalian
+      ? 'L’accesso al microfono non è consentito. L’audio non viene registrato o salvato; serve solo a valutare il volume. Consentilo nelle impostazioni.'
+      : isKorean
+      ? '마이크 사용이 허용되지 않았습니다. 오디오는 녹음 또는 저장되지 않고 음량 판단에만 사용됩니다. 기기 설정에서 허용하세요.'
+      : isPortuguese
+      ? 'O acesso ao microfone não está permitido. O áudio não é gravado nem salvo; é usado apenas para medir o volume. Permita nos ajustes.'
       : 'Microphone access is not allowed. Audio is not recorded or saved; it is used only to judge volume level. Please allow it in device settings.';
 
   String soundError(Object error) => isJapanese
       ? '音の取得に失敗しました: $error'
       : isChinese
       ? '无法读取声音: $error'
+      : isTraditionalChinese
+      ? '無法讀取聲音: $error'
       : isSpanish
       ? 'No se pudo leer el sonido: $error'
+      : isGerman
+      ? 'Ton konnte nicht gelesen werden: $error'
+      : isFrench
+      ? 'Impossible de lire le son : $error'
+      : isItalian
+      ? 'Impossibile leggere il suono: $error'
+      : isKorean
+      ? '소리를 읽을 수 없습니다: $error'
+      : isPortuguese
+      ? 'Não foi possível ler o som: $error'
       : 'Could not read sound: $error';
 
   String get vibrationError => isJapanese
       ? '加速度センサーから振動を取得できませんでした。'
       : isChinese
       ? '无法从加速度传感器读取振动。'
+      : isTraditionalChinese
+      ? '無法從加速度感測器讀取震動。'
       : isSpanish
       ? 'No se pudo leer la vibración desde el acelerómetro.'
+      : isGerman
+      ? 'Vibration konnte nicht vom Beschleunigungssensor gelesen werden.'
+      : isFrench
+      ? 'Impossible de lire la vibration depuis l’accéléromètre.'
+      : isItalian
+      ? 'Impossibile leggere la vibrazione dall’accelerometro.'
+      : isKorean
+      ? '가속도 센서에서 진동을 읽을 수 없습니다.'
+      : isPortuguese
+      ? 'Não foi possível ler a vibração pelo acelerômetro.'
       : 'Could not read vibration from the accelerometer.';
 }
 
@@ -659,6 +1736,7 @@ class _ParalarmHomeState extends State<ParalarmHome>
   SettingsError? _settingsError;
   Object? _settingsErrorDetail;
   bool _hasShownLaunchMicrophonePrompt = false;
+  bool _screenshotFreezeEnabled = false;
   DateTime? _lastDangerAlertAt;
 
   AppStrings get _strings => AppStrings(_language);
@@ -1056,6 +2134,7 @@ class _ParalarmHomeState extends State<ParalarmHome>
     _stopSensor();
     _history.clear();
     _movingAverageSamples.clear();
+    _screenshotFreezeEnabled = false;
     if (_target == MonitorTarget.sound) {
       return _startSoundSensor();
     } else {
@@ -1131,6 +2210,11 @@ class _ParalarmHomeState extends State<ParalarmHome>
       return;
     }
 
+    if (_screenshotFreezeEnabled) {
+      _applyScreenshotFreezeValue();
+      return;
+    }
+
     setState(() {
       final filteredValue = _filteredSensorValue(value);
       _currentValue = filteredValue.clamp(0, _maxThreshold * 1.25);
@@ -1168,6 +2252,49 @@ class _ParalarmHomeState extends State<ParalarmHome>
       (sum, sample) => sum + sample,
     );
     return total / _movingAverageSamples.length;
+  }
+
+  double get _screenshotFreezeValue {
+    final margin = max(
+      _target == MonitorTarget.sound ? 4.0 : 0.8,
+      (_maxThreshold - _minThreshold) * 0.08,
+    );
+    final value = _rule == ThresholdRule.above
+        ? _threshold - margin
+        : _threshold + margin;
+    return value.clamp(_minThreshold, _maxThreshold);
+  }
+
+  void _applyScreenshotFreezeValue() {
+    final value = _screenshotFreezeValue;
+    setState(() {
+      _currentValue = value;
+      _history
+        ..clear()
+        ..addAll(List<double>.filled(80, value));
+      _movingAverageSamples
+        ..clear()
+        ..add(value);
+      _settingsError = null;
+      _settingsErrorDetail = null;
+    });
+  }
+
+  void _toggleScreenshotFreeze() {
+    setState(() {
+      _screenshotFreezeEnabled = !_screenshotFreezeEnabled;
+    });
+
+    if (_screenshotFreezeEnabled) {
+      _applyScreenshotFreezeValue();
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_screenshotFreezeEnabled ? '撮影用固定値: ON' : '撮影用固定値: OFF'),
+        duration: const Duration(milliseconds: 1200),
+      ),
+    );
   }
 
   void _enterAlertState() {
@@ -1959,6 +3086,7 @@ class _ParalarmHomeState extends State<ParalarmHome>
           });
         },
         onAlarmSoundPreview: _previewAlarmSound,
+        onScreenshotFreezeToggle: _toggleScreenshotFreeze,
         onStart: _startCountdownOrMonitoring,
       ),
       AppMode.countdown => Stack(
@@ -2065,7 +3193,7 @@ class _LanguageMenuRow extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         SizedBox(
-          width: 170,
+          width: 210,
           child: DropdownButtonFormField<AppLanguage>(
             initialValue: language,
             dropdownColor: _panelGray,
@@ -2099,8 +3227,32 @@ class _LanguageMenuRow extends StatelessWidget {
                 child: Text(strings.chinese),
               ),
               DropdownMenuItem(
+                value: AppLanguage.traditionalChinese,
+                child: Text(strings.traditionalChinese),
+              ),
+              DropdownMenuItem(
                 value: AppLanguage.spanish,
                 child: Text(strings.spanish),
+              ),
+              DropdownMenuItem(
+                value: AppLanguage.german,
+                child: Text(strings.german),
+              ),
+              DropdownMenuItem(
+                value: AppLanguage.french,
+                child: Text(strings.french),
+              ),
+              DropdownMenuItem(
+                value: AppLanguage.italian,
+                child: Text(strings.italian),
+              ),
+              DropdownMenuItem(
+                value: AppLanguage.korean,
+                child: Text(strings.korean),
+              ),
+              DropdownMenuItem(
+                value: AppLanguage.portuguese,
+                child: Text(strings.portuguese),
               ),
             ],
             onChanged: (value) {
@@ -2553,6 +3705,7 @@ class _SettingsView extends StatelessWidget {
     required this.onDangerAlertAccelerationChanged,
     required this.onThresholdChanged,
     required this.onAlarmSoundPreview,
+    required this.onScreenshotFreezeToggle,
     required this.onStart,
   });
 
@@ -2589,6 +3742,7 @@ class _SettingsView extends StatelessWidget {
   final ValueChanged<bool> onDangerAlertAccelerationChanged;
   final ValueChanged<double> onThresholdChanged;
   final VoidCallback onAlarmSoundPreview;
+  final VoidCallback onScreenshotFreezeToggle;
   final VoidCallback onStart;
 
   @override
@@ -2701,6 +3855,7 @@ class _SettingsView extends StatelessWidget {
                 onDangerAlertAccelerationChanged:
                     onDangerAlertAccelerationChanged,
                 onAlarmSoundPreview: onAlarmSoundPreview,
+                onScreenshotFreezeToggle: onScreenshotFreezeToggle,
               ),
               const SizedBox(height: 20),
             ],
@@ -3058,6 +4213,7 @@ class _AdvancedSettingsPanel extends StatelessWidget {
     required this.onDangerAlertModeChanged,
     required this.onDangerAlertAccelerationChanged,
     required this.onAlarmSoundPreview,
+    required this.onScreenshotFreezeToggle,
   });
 
   final AppStrings strings;
@@ -3078,6 +4234,7 @@ class _AdvancedSettingsPanel extends StatelessWidget {
   final ValueChanged<DangerAlertMode> onDangerAlertModeChanged;
   final ValueChanged<bool> onDangerAlertAccelerationChanged;
   final VoidCallback onAlarmSoundPreview;
+  final VoidCallback onScreenshotFreezeToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -3176,6 +4333,15 @@ class _AdvancedSettingsPanel extends StatelessWidget {
                 onChanged: onDangerAlertAccelerationChanged,
               ),
             ],
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: onScreenshotFreezeToggle,
+                onLongPress: onScreenshotFreezeToggle,
+                child: const SizedBox(width: 56, height: 32),
+              ),
+            ),
           ],
         ),
       ),
