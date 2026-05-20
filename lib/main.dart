@@ -1149,20 +1149,21 @@ class AppStrings {
     portuguese: 'Acesso ao microfone',
   );
   String get microphonePermissionBody => _text(
-    '音量を監視するにはマイクの使用許可が必要です。音声は録音・保存せず、端末内で音量レベルの計算にだけ使います。次の確認で許可してください。',
-    'Microphone access is required to monitor volume. Audio is not recorded or saved; it is used on device only to calculate volume level. Please allow it on the next prompt.',
-    '监测音量需要麦克风权限。不会录音或保存音频，仅在设备上用于计算音量级别。请在接下来的提示中允许。',
-    'Se necesita acceso al micrófono para monitorear el volumen. El audio no se graba ni se guarda; solo se usa en el dispositivo para calcular el nivel de volumen. Permítelo en el siguiente aviso.',
+    '音量を監視するにはマイクの使用許可が必要です。音声は録音・保存せず、端末内で音量レベルの計算にだけ使います。次にiOSの確認画面が表示されます。',
+    'Microphone access is required to monitor volume. Audio is not recorded or saved; it is used on device only to calculate volume level. The iOS permission prompt will appear next.',
+    '监测音量需要麦克风权限。不会录音或保存音频，仅在设备上用于计算音量级别。接下来会显示 iOS 权限提示。',
+    'Se necesita acceso al micrófono para monitorear el volumen. El audio no se graba ni se guarda; solo se usa en el dispositivo para calcular el nivel de volumen. A continuación aparecerá el aviso de permiso de iOS.',
     german:
-        'Zum Überwachen der Lautstärke ist Mikrofonzugriff erforderlich. Audio wird nicht aufgenommen oder gespeichert, sondern nur auf dem Gerät berechnet.',
+        'Zum Überwachen der Lautstärke ist Mikrofonzugriff erforderlich. Audio wird nicht aufgenommen oder gespeichert, sondern nur auf dem Gerät berechnet. Als Nächstes erscheint die iOS-Berechtigungsabfrage.',
     french:
-        'L’accès au micro est nécessaire pour surveiller le volume. L’audio n’est ni enregistré ni stocké, il sert seulement au calcul sur l’appareil.',
+        'L’accès au micro est nécessaire pour surveiller le volume. L’audio n’est ni enregistré ni stocké, il sert seulement au calcul sur l’appareil. La demande d’autorisation iOS va s’afficher.',
     italian:
-        'Per monitorare il volume serve l’accesso al microfono. L’audio non viene registrato o salvato, ma usato solo sul dispositivo.',
-    korean: '음량을 모니터링하려면 마이크 접근이 필요합니다. 오디오는 녹음 또는 저장되지 않고 기기 내 음량 계산에만 사용됩니다.',
-    traditionalChinese: '監測音量需要麥克風權限。音訊不會錄製或儲存，僅在裝置上用於計算音量級別。',
+        'Per monitorare il volume serve l’accesso al microfono. L’audio non viene registrato o salvato, ma usato solo sul dispositivo. Ora apparirà la richiesta di autorizzazione di iOS.',
+    korean:
+        '음량을 모니터링하려면 마이크 접근이 필요합니다. 오디오는 녹음 또는 저장되지 않고 기기 내 음량 계산에만 사용됩니다. 다음에 iOS 권한 요청이 표시됩니다.',
+    traditionalChinese: '監測音量需要麥克風權限。音訊不會錄製或儲存，僅在裝置上用於計算音量級別。接下來會顯示 iOS 權限提示。',
     portuguese:
-        'O acesso ao microfone é necessário para monitorar o volume. O áudio não é gravado nem salvo; é usado apenas no dispositivo.',
+        'O acesso ao microfone é necessário para monitorar o volume. O áudio não é gravado nem salvo; é usado apenas no dispositivo. O aviso de permissão do iOS aparecerá em seguida.',
   );
   String get microphonePermissionSettingsBody => _text(
     'マイクの使用が拒否されています。音量を監視するには端末の設定でマイクを許可してください。音声は録音・保存・外部送信せず、音量レベルの判定にだけ使います。',
@@ -2047,15 +2048,8 @@ class _ParalarmHomeState extends State<ParalarmHome>
       return;
     }
 
-    final shouldRequest = await _showMicrophonePermissionDialog();
+    await _showMicrophonePermissionDialog();
     if (!mounted) {
-      return;
-    }
-    if (!shouldRequest) {
-      setState(() {
-        _settingsError = SettingsError.microphoneDenied;
-        _settingsErrorDetail = null;
-      });
       return;
     }
 
@@ -2077,26 +2071,21 @@ class _ParalarmHomeState extends State<ParalarmHome>
     }
   }
 
-  Future<bool> _showMicrophonePermissionDialog() async {
-    final result = await showDialog<bool>(
+  Future<void> _showMicrophonePermissionDialog() async {
+    await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(_strings.microphonePermissionTitle),
         content: Text(_strings.microphonePermissionBody),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(_strings.later),
-          ),
           FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(_strings.allow),
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(_strings.next),
           ),
         ],
       ),
     );
-    return result ?? false;
   }
 
   Future<void> _showMicrophoneSettingsDialog() async {

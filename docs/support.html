@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Par-alarm サポート</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080a0c;
+      --panel: #12161a;
+      --text: #f4f7ee;
+      --muted: #aeb7aa;
+      --lime: #d7ff21;
+      --line: #3a4438;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 10%, rgba(215, 255, 33, .16), transparent 30%), var(--bg);
+      color: var(--text);
+    }
+    main {
+      width: min(880px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 56px 0;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px;
+      background: rgba(18, 22, 26, .92);
+      box-shadow: 0 0 34px rgba(215, 255, 33, .12);
+    }
+    h1, h2 {
+      color: var(--lime);
+      letter-spacing: 0;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(32px, 6vw, 54px);
+    }
+    h2 {
+      margin: 32px 0 10px;
+      font-size: 22px;
+    }
+    p, li { color: var(--muted); line-height: 1.8; }
+    a {
+      color: var(--lime);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+    ul { padding-left: 22px; }
+    .note {
+      border-left: 3px solid var(--lime);
+      padding-left: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <h1>Par-alarm サポート</h1>
+      <p>Par-alarmに関するお問い合わせ、不具合報告、ご要望は以下の連絡先までお送りください。</p>
+
+      <h2>お問い合わせ</h2>
+      <p>メール: <a href="mailto:paralarm.support@yamtomworks.com">paralarm.support@yamtomworks.com</a></p>
+      <p class="note">お問い合わせの際は、利用端末、iOSバージョン、アプリのバージョン、発生した操作内容を添えていただくと確認がスムーズです。</p>
+
+      <h2>よくある確認事項</h2>
+      <ul>
+        <li>音量監視を使うには、iPhoneの設定でマイクの使用を許可してください。</li>
+        <li>アラーム音が聞こえない場合は、本体音量、消音モード、接続中のイヤホンやBluetooth機器をご確認ください。</li>
+        <li>振動の検出は端末のセンサー値に基づくため、端末の置き方や持ち方によって反応が変わる場合があります。</li>
+        <li>本アプリは安全を保証するものではありません。周囲の安全を確認し、端末の落下や転倒に注意してご利用ください。</li>
+      </ul>
+
+      <h2>関連情報</h2>
+      <p><a href="./privacy_policy.html">プライバシーポリシー</a></p>
+      <p><a href="./disclaimer.html">免責事項</a></p>
+      <p><a href="./index.html">トップへ戻る</a></p>
+    </section>
+  </main>
+</body>
+</html>
